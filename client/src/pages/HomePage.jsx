@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Card from '../components/Card';
-import { useBlogs, useEvents } from '../hooks/useApi';
+import { useBlogs } from '../hooks/useApi';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { blogs, loading: blogsLoading, error: blogsError } = useBlogs({ limit: 2 });
-  const { events, loading: eventsLoading, error: eventsError } = useEvents({ limit: 2 });
-  
-  const loading = blogsLoading || eventsLoading;
-  const error = blogsError || eventsError;
+  const { blogs, loading, error } = useBlogs();
 
   const handleJoinCommunity = () => {
     navigate('/forum');
@@ -20,16 +16,30 @@ const HomePage = () => {
     navigate(`/blog/${blog.slug}`);
   };
 
-  const handleEventClick = (event) => {
-    navigate(`/events/${event.slug}`);
-  };
-
-  const handleViewAllBlogs = () => {
+  const handleViewMore = () => {
     navigate('/blog');
   };
 
-  const handleViewAllEvents = () => {
-    navigate('/events');
+  // Helper function to format dates safely
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Invalid Date';
+    
+    let date;
+    if (dateString.includes('T')) {
+      date = new Date(dateString);
+    } else {
+      date = new Date(dateString + 'T00:00:00');
+    }
+    
+    if (isNaN(date.getTime())) {
+      return 'Invalid Date';
+    }
+    
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
   };
 
   if (error) {
@@ -45,6 +55,9 @@ const HomePage = () => {
       </div>
     );
   }
+
+  // Get only the latest 2 blogs
+  const latestBlogs = blogs.slice(0, 2);
 
   return (
     <div>
@@ -76,82 +89,44 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Upcoming Events Section */}
-      <section className="py-16 bg-gray-50 rounded-xl">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Upcoming Events</h2>
-          
-          {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto"></div>
-              <p className="mt-2 text-gray-500">Loading events...</p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {events.slice(0, 2).map((event) => (
-                <div key={event.id} className="text-center">
-                  <h3 className="text-2xl font-bold text-black">{event.title}</h3>
-                  <p className="mt-2 text-gray-500">
-                    {new Date(event.event_date).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })} 
-                    {event.event_time && ` • ${event.event_time}`}
-                    {event.location && ` • ${event.location}`}
-                  </p>
-                  <button
-                    onClick={() => handleEventClick(event)}
-                    className="mt-4 inline-block text-black font-bold hover:underline"
-                  >
-                    View Details →
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="text-center mt-12">
-            <button
-              onClick={handleViewAllEvents}
-              className="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
-            >
-              View All Events
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* Latest Articles Section */}
       <section className="py-16">
         <h2 className="text-4xl font-bold text-center mb-16">Latest Articles</h2>
         
         {loading ? (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto"></div>
-            <p className="mt-2 text-gray-500">Loading articles...</p>
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
+            <p className="mt-4 text-gray-500">Loading articles...</p>
           </div>
+        ) : latestBlogs.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {latestBlogs.map((blog) => (
+                <Card
+                  key={blog.id}
+                  item={blog}
+                  type="blog"
+                  onClick={handleBlogClick}
+                />
+              ))}
+            </div>
+
+            {/* View More Button */}
+            <div className="text-center mt-16">
+              <button
+                onClick={handleViewMore}
+                className="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+              >
+                View More
+              </button>
+            </div>
+          </>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {blogs.slice(0, 2).map((blog) => (
-              <Card
-                key={blog.id}
-                item={blog}
-                type="blog"
-                onClick={handleBlogClick}
-              />
-            ))}
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No articles available at the moment.</p>
+            <p className="text-gray-400 mt-2">Check back soon for new content!</p>
           </div>
         )}
-
-        <div className="text-center mt-16">
-          <button
-            onClick={handleViewAllBlogs}
-            className="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
-          >
-            View All Articles
-          </button>
-        </div>
       </section>
     </div>
   );

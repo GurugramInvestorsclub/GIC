@@ -30,9 +30,12 @@ const Layout = ({ children, activePage = 'home' }) => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <h1 className="text-2xl font-bold tracking-tight">
+              <button 
+                onClick={() => handleNavClick('/')}
+                className="text-2xl font-bold tracking-tight hover:text-gray-700 transition-colors"
+              >
                 GIC
-              </h1>
+              </button>
             </div>
 
             {/* Desktop Navigation */}
@@ -43,8 +46,8 @@ const Layout = ({ children, activePage = 'home' }) => {
                   onClick={() => handleNavClick(item.href)}
                   className={`text-lg transition-colors duration-200 ${
                     activePage === item.id
-                      ? 'font-bold text-black border-b-2 border-black pb-1'
-                      : 'text-gray-600 hover:text-black hover:font-medium'
+                      ? 'font-bold text-black'
+                      : 'text-gray-600 hover:text-black hover:underline'
                   }`}
                 >
                   {item.name}
