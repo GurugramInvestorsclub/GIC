@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://gic.in",
+"homepage": "https://mygic.in",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
