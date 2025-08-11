@@ -12,8 +12,8 @@ const BlogPage = () => {
   const [submitMessage, setSubmitMessage] = useState('');
   const [submitStatus, setSubmitStatus] = useState(''); // 'success' or 'error'
 
-  // Your Google Apps Script Web App URL
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgOm6V6gjP3ZrsqBH8XfMVAvXbzQvs34EpTjEY2P-nMHntRt3-AUgBmODvFzPcLUdqAw/exec';
+  // Script Web App URL
+  const GOOGLE_SCRIPT_URL =import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
   const handleBlogClick = (blog) => {
     navigate(`/blog/${blog.slug}`);
