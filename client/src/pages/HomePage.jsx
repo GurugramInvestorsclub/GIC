@@ -63,8 +63,8 @@ const HomePage = () => {
     <div>
       {/* Hero Section */}
       <Hero
-        title="Gurugram Investors Club"
-        subtitle="Building wealth through informed analysis, collaborative research, and strategic networking in the heart of India's financial capital."
+        title="Turn ideas into Alpha Together"
+        subtitle="An warm, open community of 400+ NCR based DIY & HNI investors that helps you discover ideas, generate insights, and strengthen your network one meetup at a time."
         showCTA={true}
         ctaText="Join Our Community"
         ctaAction={handleJoinCommunity}
@@ -75,23 +75,23 @@ const HomePage = () => {
       <section className="py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
-            <h3 className="text-4xl font-bold text-black">500+</h3>
-            <p className="text-lg text-gray-500 mt-2">Active Members</p>
+            <h3 className="text-4xl font-bold text-black">400+</h3>
+            <p className="text-lg text-gray-500 mt-2">Members</p>
           </div>
           <div className="text-center">
-            <h3 className="text-4xl font-bold text-black">120+</h3>
-            <p className="text-lg text-gray-500 mt-2">Companies Analyzed</p>
+            <h3 className="text-4xl font-bold text-black">50+</h3>
+            <p className="text-lg text-gray-500 mt-2">Companies analysed</p>
           </div>
           <div className="text-center">
-            <h3 className="text-4xl font-bold text-black">25%</h3>
-            <p className="text-lg text-gray-500 mt-2">Avg. Annual Returns</p>
+            <h3 className="text-4xl font-bold text-black">30+</h3>
+            <p className="text-lg text-gray-500 mt-2">Physical meetups conducted</p>
           </div>
         </div>
       </section>
 
       {/* Latest Articles Section */}
       <section className="py-16">
-        <h2 className="text-4xl font-bold text-center mb-16">Latest Articles</h2>
+        <h2 className="text-4xl font-bold text-center mb-16">Latest Blogs</h2>
         
         {loading ? (
           <div className="text-center py-12">

@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Layout = ({ children, activePage = 'home' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Scroll to top whenever the route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const navigation = [
     { name: 'Home', href: '/', id: 'home' },
@@ -32,9 +38,9 @@ const Layout = ({ children, activePage = 'home' }) => {
             <div className="flex-shrink-0">
               <button 
                 onClick={() => handleNavClick('/')}
-                className="text-2xl font-bold tracking-tight hover:text-gray-700 transition-colors"
+                className="focus:outline-none focus:ring-0 hover:opacity-80 transition-opacity"
               >
-                GIC
+                <img src="./Logo.png" alt="GIC Logo" className='w-[150px]'/>
               </button>
             </div>
 
@@ -44,10 +50,10 @@ const Layout = ({ children, activePage = 'home' }) => {
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.href)}
-                  className={`text-lg transition-colors duration-200 ${
+                  className={`text-lg transition-colors duration-200 focus:outline-none focus:ring-0 ${
                     activePage === item.id
                       ? 'font-bold text-black'
-                      : 'text-gray-600 hover:text-black hover:underline'
+                      : 'text-gray-600 hover:text-black'
                   }`}
                 >
                   {item.name}
@@ -59,7 +65,7 @@ const Layout = ({ children, activePage = 'home' }) => {
             <div className="md:hidden">
               <button
                 onClick={toggleMobileMenu}
-                className="text-gray-600 hover:text-black focus:outline-none focus:text-black transition-colors duration-200"
+                className="text-gray-600 hover:text-black focus:outline-none focus:ring-0 transition-colors duration-200"
                 aria-label="Toggle mobile menu"
               >
                 <svg
@@ -96,7 +102,7 @@ const Layout = ({ children, activePage = 'home' }) => {
                   <button
                     key={item.id}
                     onClick={() => handleNavClick(item.href)}
-                    className={`block w-full text-left px-3 py-2 text-lg transition-colors duration-200 ${
+                    className={`block w-full text-left px-3 py-2 text-lg transition-colors duration-200 focus:outline-none focus:ring-0 ${
                       activePage === item.id
                         ? 'font-bold text-black bg-gray-50'
                         : 'text-gray-600 hover:text-black hover:bg-gray-50'
@@ -132,4 +138,4 @@ const Layout = ({ children, activePage = 'home' }) => {
   );
 };
 
-export default Layout;
+export default Layout;  

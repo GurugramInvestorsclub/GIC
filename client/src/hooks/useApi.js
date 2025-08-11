@@ -92,7 +92,9 @@ export const useBlogs = (params = {}) => {
         }
 
         const data = await response.json();
-        const blogsData = data?.data?.blogs || [];
+        
+        // Handle blogs listing API structure: {data: {blogs: [...]}}
+        const blogsData = data?.data?.blogs || data?.blogs || [];
         setBlogs(blogsData);
       } catch (err) {
         setError(err.message);
@@ -132,7 +134,9 @@ export const useEvents = (params = {}) => {
         }
 
         const data = await response.json();
-        const eventsData = data?.data?.events || data?.data || [];
+        
+        // Handle events listing API structure (similar to blogs)
+        const eventsData = data?.data?.events || data?.events || data?.data || [];
         setEvents(eventsData);
       } catch (err) {
         setError(err.message);
@@ -171,9 +175,28 @@ export const useBlog = (slug) => {
         }
 
         const data = await response.json();
-        const blogData = data?.data || data;
+        console.log('Single blog API raw response:', data);
+        
+        // Handle single blog API structure - try multiple possible structures
+        let blogData;
+        if (data?.blog) {
+          // Response structure: {blog: {...}}
+          blogData = data.blog;
+        } else if (data?.data?.blog) {
+          // Response structure: {data: {blog: {...}}}
+          blogData = data.data.blog;
+        } else if (data?.data) {
+          // Response structure: {data: {...}}
+          blogData = data.data;
+        } else {
+          // Direct blog object
+          blogData = data;
+        }
+        
+        console.log('Extracted blog data:', blogData);
         setBlog(blogData);
       } catch (err) {
+        console.error('Blog fetch error:', err);
         setError(err.message);
         setBlog(null);
       } finally {
@@ -210,28 +233,28 @@ export const useEvent = (slug) => {
         }
 
         const data = await response.json();
-        console.log('Single event API response:', data);
+        console.log('Single event API raw response:', data);
         
-        // Fix: Handle the correct nested structure
+        // Handle single event API structure - try multiple possible structures
         let eventData;
-        if (data?.data?.event) {
+        if (data?.event) {
+          // Response structure: {event: {...}}
+          eventData = data.event;
+        } else if (data?.data?.event) {
           // Response structure: {data: {event: {...}}}
           eventData = data.data.event;
         } else if (data?.data) {
           // Response structure: {data: {...}}
           eventData = data.data;
-        } else if (data?.event) {
-          // Response structure: {event: {...}}
-          eventData = data.event;
         } else {
           // Direct event object
           eventData = data;
         }
         
         console.log('Extracted event data:', eventData);
-        
         setEvent(eventData);
       } catch (err) {
+        console.error('Event fetch error:', err);
         setError(err.message);
         setEvent(null);
       } finally {

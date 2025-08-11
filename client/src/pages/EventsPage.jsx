@@ -39,6 +39,7 @@ const EventsPage = () => {
       past.sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
 
       setFeaturedEvent(featured);
+      // Remove featured event from upcoming list to avoid duplication
       setUpcomingEvents(upcoming.filter(event => event.id !== featured?.id));
       setPastEvents(past.slice(0, 4)); // Show only recent 4 past events
     }
@@ -114,7 +115,7 @@ const EventsPage = () => {
         size="large"
       />
 
-      {/* Featured Upcoming Event */}
+      {/* Featured Upcoming Event - Only show if there is one */}
       {featuredEvent && (
         <section className="mb-16">
           <div className="bg-gray-50 rounded-xl p-8">
@@ -203,33 +204,43 @@ const EventsPage = () => {
         </section>
       )}
 
-      {/* All Upcoming Events */}
-      <section className="py-16">
-        <h2 className="text-4xl font-bold text-center mb-16">All Upcoming Events</h2>
-        
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
-            <p className="mt-4 text-gray-500">Loading events...</p>
-          </div>
-        ) : upcomingEvents.length > 0 ? (
-          <div className="space-y-6">
-            {upcomingEvents.map((event) => (
-              <Card
-                key={event.id}
-                item={event}
-                type="event"
-                onClick={handleEventClick}
-              />
-            ))}
-          </div>
-        ) : (
+      {/* Other Upcoming Events - Only show if there are additional upcoming events */}
+      {upcomingEvents.length > 0 && (
+        <section className="py-16">
+          <h2 className="text-4xl font-bold text-center mb-16">
+            {featuredEvent ? 'Other Upcoming Events' : 'All Upcoming Events'}
+          </h2>
+          
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
+              <p className="mt-4 text-gray-500">Loading events...</p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {upcomingEvents.map((event) => (
+                <Card
+                  key={event.id}
+                  item={event}
+                  type="event"
+                  onClick={handleEventClick}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* No Upcoming Events Message - Only show if there are no upcoming events at all */}
+      {!loading && !featuredEvent && upcomingEvents.length === 0 && (
+        <section className="py-16">
+          <h2 className="text-4xl font-bold text-center mb-16">All Upcoming Events</h2>
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No upcoming events scheduled at the moment.</p>
             <p className="text-gray-400 mt-2">Check back soon for new events!</p>
           </div>
-        )}
-      </section>
+        </section>
+      )}
 
       {/* Past Events */}
       {pastEvents.length > 0 && (

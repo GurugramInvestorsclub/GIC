@@ -248,124 +248,120 @@ const EventDetailPage = () => {
         )}
       </header>
 
-      {/* Event Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-12">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          {/* Description */}
-          {event.description && (
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Event</h2>
-              <div className="prose prose-lg prose-gray max-w-none">
-                <p className="text-gray-800 leading-relaxed text-lg">
-                  {event.description}
-                </p>
+      {/* Event Details Card - Horizontal Format */}
+      <section className="mb-12">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Event Details</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            {/* Date & Time */}
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p className="font-semibold text-gray-900 text-sm">Date & Time</p>
+                <p className="text-gray-600 text-sm">{formatDate(event.event_date)}</p>
+                {event.event_time && (
+                  <p className="text-gray-600 text-sm">{formatTime(event.event_time)}</p>
+                )}
               </div>
-            </section>
-          )}
+            </div>
 
-          {/* Venue Details */}
-          {event.venue_details && (
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Venue Information</h2>
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-                <p className="text-gray-800 leading-relaxed">{event.venue_details}</p>
-              </div>
-            </section>
-          )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="lg:col-span-1">
-          {/* Event Details Card */}
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 sticky top-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Event Details</h3>
-            
-            <div className="space-y-6">
-              {/* Date & Time */}
+            {/* Location */}
+            {event.location && (
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-gray-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 </svg>
                 <div>
-                  <p className="font-semibold text-gray-900">Date & Time</p>
-                  <p className="text-gray-600">{formatDate(event.event_date)}</p>
-                  {event.event_time && (
-                    <p className="text-gray-600">{formatTime(event.event_time)}</p>
-                  )}
+                  <p className="font-semibold text-gray-900 text-sm">Location</p>
+                  <p className="text-gray-600 text-sm">{event.location}</p>
                 </div>
               </div>
+            )}
 
-              {/* Location */}
-              {event.location && (
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-gray-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  </svg>
-                  <div>
-                    <p className="font-semibold text-gray-900">Location</p>
-                    <p className="text-gray-600">{event.location}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Registration Deadline */}
-              {event.booking_end_date && (
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-gray-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 1115 0v5z" />
-                  </svg>
-                  <div>
-                    <p className="font-semibold text-gray-900">Registration Deadline</p>
-                    <p className="text-gray-600">
-                      {formatDate(event.booking_end_date)}
-                      {event.booking_end_time && ` at ${formatTime(event.booking_end_time)}`}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Event Type */}
+            {/* Registration Deadline */}
+            {event.booking_end_date && (
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-gray-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                <svg className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 1115 0v5z" />
                 </svg>
                 <div>
-                  <p className="font-semibold text-gray-900">Event Type</p>
-                  <p className="text-gray-600">
-                    {event.external_payment_link ? 'Paid Event' : 'Free Event'}
+                  <p className="font-semibold text-gray-900 text-sm">Registration Deadline</p>
+                  <p className="text-gray-600 text-sm">
+                    {formatDate(event.booking_end_date)}
+                    {event.booking_end_time && ` at ${formatTime(event.booking_end_time)}`}
                   </p>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Registration Actions */}
-            <div className="mt-8 space-y-3">
-              {status.canRegister ? (
-                <>
-                  <button
-                    onClick={handleRegister}
-                    className="w-full bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
-                  >
-                    Register Now
-                  </button>
-                  {event.external_payment_link && event.registration_link && (
-                    <button
-                      onClick={() => window.open(event.external_payment_link, '_blank')}
-                      className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-                    >
-                      Payment Portal
-                    </button>
-                  )}
-                </>
-              ) : (
-                <div className="w-full bg-gray-100 text-gray-600 py-3 px-6 rounded-lg font-semibold text-center">
-                  {status.text}
-                </div>
-              )}
+            {/* Event Type */}
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              <div>
+                <p className="font-semibold text-gray-900 text-sm">Event Type</p>
+                <p className="text-gray-600 text-sm">
+                  {event.external_payment_link ? 'Paid Event' : 'Free Event'}
+                </p>
+              </div>
             </div>
           </div>
+
+          {/* Registration Actions */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {status.canRegister ? (
+              <>
+                <button
+                  onClick={handleRegister}
+                  className="bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+                >
+                  Register Now
+                </button>
+                {event.external_payment_link && event.registration_link && (
+                  <button
+                    onClick={() => window.open(event.external_payment_link, '_blank')}
+                    className="border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                  >
+                    Payment Portal
+                  </button>
+                )}
+              </>
+            ) : (
+              <div className="bg-gray-100 text-gray-600 py-3 px-6 rounded-lg font-semibold text-center">
+                {status.text}
+              </div>
+            )}
+          </div>
         </div>
+      </section>
+
+      {/* Main Content - Single Column */}
+      <div className="mb-12">
+        {/* Description */}
+        {event.description && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Event</h2>
+            <div className="prose prose-lg prose-gray max-w-none">
+              <p className="text-gray-800 leading-relaxed text-lg">
+                {event.description}
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* Venue Details */}
+        {event.venue_details && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Venue Information</h2>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+              <p className="text-gray-800 leading-relaxed">{event.venue_details}</p>
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Call to Action */}
