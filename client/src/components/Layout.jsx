@@ -40,7 +40,7 @@ const Layout = ({ children, activePage = 'home' }) => {
                 onClick={() => handleNavClick('/')}
                 className="focus:outline-none focus:ring-0 hover:opacity-80 transition-opacity"
               >
-                <img src="./Logo.png" alt="GIC Logo" className='w-[150px]'/>
+                <img src="/Logo.png" alt="GIC Logo" className='w-[150px]'/>
               </button>
             </div>
 

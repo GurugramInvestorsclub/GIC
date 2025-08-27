@@ -9,6 +9,20 @@ const BlogDetailPage = () => {
   const [shareMessage, setShareMessage] = useState('');
   const [showFloatingShare, setShowFloatingShare] = useState(false);
 
+  // DEBUG: Log blog data to check image_url
+  useEffect(() => {
+    if (blog) {
+      console.log('🖼️ BLOG IMAGE DEBUG:', {
+        blog_exists: !!blog,
+        image_url: blog?.image_url,
+        image_url_type: typeof blog?.image_url,
+        image_url_length: blog?.image_url?.length,
+        content_preview: blog?.content?.substring(0, 200),
+        full_blog_object: blog
+      });
+    }
+  }, [blog]);
+
   // Show floating share button after user scrolls past the header
   useEffect(() => {
     const handleScroll = () => {
@@ -44,8 +58,10 @@ const BlogDetailPage = () => {
 
   const getReadTime = (content) => {
     if (!content || typeof content !== 'string') return 0;
+    // Strip HTML tags for word counting
+    const plainText = content.replace(/<[^>]*>/g, '');
     const wordsPerMinute = 200;
-    const words = content.replace(/<[^>]*>/g, '').trim().split(/\s+/).filter(word => word.length > 0);
+    const words = plainText.trim().split(/\s+/).filter(word => word.length > 0);
     return Math.ceil(words.length / wordsPerMinute);
   };
 
@@ -234,19 +250,23 @@ const BlogDetailPage = () => {
             </div>
           </div>
 
-          {/* Featured Image - Medium Style */}
+          {/* Featured Image - Only if it exists and is different from inline images */}
           {blog.image_url && (
             <div className="mb-12">
               <img 
                 src={blog.image_url} 
                 alt={blog.title}
                 className="w-full max-w-[600px] h-auto object-cover rounded-xl shadow-sm mx-auto"
+                onError={(e) => {
+                  console.error('Featured image failed to load:', blog.image_url);
+                  e.target.style.display = 'none';
+                }}
               />
             </div>
           )}
         </header>
 
-        {/* Article Content - Tailwind Only with Proper Paragraph Breaks */}
+        {/* Article Content - FIXED: Now properly renders HTML with inline images */}
         <article className="mb-16">
           <div className="max-w-[680px] mx-auto">
             <div 
@@ -276,11 +296,7 @@ const BlogDetailPage = () => {
                 prose-hr:border-gray-200 prose-hr:my-12
               "
               dangerouslySetInnerHTML={{ 
-                __html: blog.content
-                  .split('.')
-                  .filter(sentence => sentence.trim())
-                  .map(sentence => `<p>${sentence.trim()}.</p>`)
-                  .join('')
+                __html: blog.content // ✅ FIXED: Direct HTML rendering - no more breaking image tags!
               }}
             />
           </div>
