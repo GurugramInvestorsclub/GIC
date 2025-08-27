@@ -129,7 +129,7 @@ const Layout = ({ children, activePage = 'home' }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <p className="text-sm text-gray-500">
-              © 2025 Gurugram Investors Club. All Rights Reserved.
+              © 2025 Gurugram Investors Club. All Rights Reserved.test
             </p>
           </div>
         </div>
