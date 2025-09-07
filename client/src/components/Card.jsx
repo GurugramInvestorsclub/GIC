@@ -62,24 +62,28 @@ const Card = ({ item, type = 'blog', onClick = () => {}, className = '' }) => {
   if (type === 'blog') {
     return (
       <div 
-        className={`bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group border border-gray-100 ${className}`}
+        className={`bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group border border-gray-100 flex flex-col h-full ${className}`}
         onClick={handleClick}
       >
-        {/* Blog Image */}
+        {/* Blog Image - Fixed aspect ratio container */}
         {item.image_url && (
-          <div className="relative h-48 overflow-hidden">
+          <div className="relative w-full aspect-[16/9] overflow-hidden bg-gray-100">
             <img 
               src={item.image_url} 
               alt={item.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.parentElement.style.display = 'none';
+              }}
             />
             {/* Overlay on hover */}
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
           </div>
         )}
         
-        {/* Blog Content */}
-        <div className="p-6">
+        {/* Blog Content - Flex grow to fill remaining space */}
+        <div className="p-6 flex flex-col flex-grow">
           {/* Date and Tags */}
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm text-gray-500">
@@ -97,13 +101,13 @@ const Card = ({ item, type = 'blog', onClick = () => {}, className = '' }) => {
             {item.title}
           </h3>
 
-          {/* Content Preview */}
-          <p className="text-gray-600 mb-4 leading-relaxed">
+          {/* Content Preview - Flex grow to fill space */}
+          <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
             {truncateContent(item.content, 120)}
           </p>
 
-          {/* Author and Read More */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          {/* Author and Read More - Always at bottom */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
             <div className="flex items-center space-x-3">
               {item.author && (
                 <>
@@ -218,8 +222,59 @@ const Card = ({ item, type = 'blog', onClick = () => {}, className = '' }) => {
     );
   }
 
-  // Fallback
-  return null;
+  // Demo with sample data
+  const sampleBlog = {
+    id: 1,
+    title: "Understanding Investment Fundamentals",
+    content: "This comprehensive guide covers the essential principles of investment strategy, risk management, and portfolio diversification. Learn how to make informed decisions in today's dynamic market environment.",
+    image_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=300&fit=crop",
+    author: "John Smith",
+    published_date: "2024-01-15",
+    tags: ["#investing", "#fundamentals"]
+  };
+
+  const sampleEvent = {
+    id: 1,
+    title: "Annual Investment Conference 2024",
+    description: "Join us for our biggest event of the year featuring keynote speakers, networking opportunities, and expert panel discussions on market trends.",
+    event_date: "2024-02-20",
+    event_time: "09:00 AM",
+    location: "Convention Center, Downtown",
+    booking_end_date: "2024-02-15",
+    registration_link: "https://example.com/register"
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Card Component Examples</h1>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Blog Card Example */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Blog Card</h2>
+            <Card item={sampleBlog} type="blog" onClick={(item) => console.log('Blog clicked:', item)} />
+          </div>
+          
+          {/* Event Card Example */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Event Card</h2>
+            <Card item={sampleEvent} type="event" onClick={(item) => console.log('Event clicked:', item)} />
+          </div>
+        </div>
+
+        {/* Grid Layout Example */}
+        <div className="mt-12">
+          <h2 className="text-xl font-semibold mb-6">Grid Layout Example</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card item={sampleBlog} type="blog" />
+            <Card item={{...sampleBlog, image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop"}} type="blog" />
+            <Card item={{...sampleBlog, image_url: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=600&fit=crop"}} type="blog" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Card;
