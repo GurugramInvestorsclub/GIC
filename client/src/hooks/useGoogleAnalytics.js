@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const GA_TRACKING_ID = import.meta.GA_TRACKING_ID;
+const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID;
 
 const useGoogleAnalytics = () => {
   useEffect(() => {
