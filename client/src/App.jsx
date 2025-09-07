@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
@@ -7,10 +7,32 @@ import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 import EventsPage from './pages/EventsPage';
 import EventDetailPage from './pages/EventDetailPage';
+import useGoogleAnalytics from './hooks/useGoogleAnalytics';
+
+// Component to track page views on route changes
+const PageTracker = () => {
+  const location = useLocation();
+  const { trackPageView } = useGoogleAnalytics();
+
+  useEffect(() => {
+    // Track page view when route changes
+    trackPageView(location.pathname + location.search, document.title);
+  }, [location, trackPageView]);
+
+  return null;
+};
 
 const App = () => {
+  const { trackPageView } = useGoogleAnalytics();
+
+  // Track initial page load
+  useEffect(() => {
+    trackPageView(window.location.pathname + window.location.search, document.title);
+  }, [trackPageView]);
+
   return (
     <Router>
+      <PageTracker />
       <Routes>
         <Route path="/" element={
           <Layout activePage="home">
