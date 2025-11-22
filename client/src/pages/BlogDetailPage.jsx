@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBlog } from '../hooks/useApi';
-import useGoogleAnalytics from '../hooks/useGoogleAnalytics';
 const BlogDetailPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
